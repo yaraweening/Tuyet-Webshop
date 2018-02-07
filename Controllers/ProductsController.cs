@@ -20,10 +20,42 @@ namespace TuyetWebshop.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            var TuyetWebshopContext = _context.Product.Include(p => p.Category);
-            return View(await TuyetWebshopContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["GenreSortParm"] = sortOrder == "Genre" ? "genre_desc" : "Genre";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Genre";
+
+            var search = from s in _context.Product
+                         select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                search = search.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    search = search.OrderByDescending(s => s.Name);
+                    break;
+                case "Genre":
+                    search = search.OrderBy(s => s.Category);
+                    break;
+                case "genre_desc":
+                    search = search.OrderByDescending(s => s.Category);
+                    break;
+                case "Price":
+                    search = search.OrderBy(s => s.Price);
+                    break;
+                case "price_desc":
+                    search = search.OrderByDescending(s => s.Price);
+                    break;
+                default:
+                    search = search.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(await search.ToListAsync());
         }
     }
 }

@@ -5,6 +5,15 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-controller="Products" asp-action="Index">
+    <p>
+        Search on title: <input type="text" name="SearchString">
+        <input type="submit" value="Search" /> | 
+        <a asp-action="Index">Back to Full List</a>
+    </p> 
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -12,14 +21,14 @@
                     @Html.DisplayNameFor(model => model.Image)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
+</th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayNameFor(model => model.Price)</a>
+</th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayNameFor(model => model.Category)</a>
+    </th>
             <th></th>
         </tr>
     </thead>

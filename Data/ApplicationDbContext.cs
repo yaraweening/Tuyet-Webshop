@@ -18,6 +18,7 @@ namespace TuyetWebshop.Data
         public DbSet<TuyetWebshop.Models.Product> Product { get; set; }
 
         public DbSet<TuyetWebshop.Models.Catgory> Catgory { get; set; }
+        public object Movie { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
