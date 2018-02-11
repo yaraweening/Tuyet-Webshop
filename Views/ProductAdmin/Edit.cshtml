@@ -9,14 +9,18 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-6">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                <input type="file" name="imageUploads" multiple />
+            </div>
+            <div class="form-group">
+                @foreach (var image in Model.GetImages())
+                {
+                    <img src="@Html.DisplayFor(model => image)" style="max-width:150px;" />
+                }
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -36,7 +40,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
-        </form>
+</form>
     </div>
 </div>
 

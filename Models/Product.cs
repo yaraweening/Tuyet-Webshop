@@ -17,5 +17,16 @@ namespace TuyetWebshop.Models
         public Catgory Category { get; set; }
         public List<Rating> Ratings { get; set; }
         
+        public List<string> GetImages()
+        {
+            var result = new List<string>();
+
+            if (!string.IsNullOrEmpty(Image))
+            {
+                result.AddRange(Image.Split(","));
+            }
+
+            return result;
+        }
     }
 }

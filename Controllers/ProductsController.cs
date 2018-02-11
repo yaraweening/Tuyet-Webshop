@@ -20,13 +20,31 @@ namespace TuyetWebshop.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Product
+                .Include(p => p.Category)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["GenreSortParm"] = sortOrder == "Genre" ? "genre_desc" : "Genre";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Genre";
 
-            var search = from s in _context.Product
+            var search = from s in _context.Product.Include(p => p.Category)
                          select s;
 
             if (!String.IsNullOrEmpty(searchString))

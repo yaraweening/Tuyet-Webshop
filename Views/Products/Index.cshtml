@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<TuyetWebshop.Models.Product>
 
-    <h2>Index</h2>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Products</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -9,51 +13,50 @@
 <form asp-controller="Products" asp-action="Index">
     <p>
         Search on title: <input type="text" name="SearchString">
-        <input type="submit" value="Search" /> | 
+        <input type="submit" value="Search" /> |
         <a asp-action="Index">Back to Full List</a>
-    </p> 
+    </p>
 </form>
 
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Image)
-                </th>
-                <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
-</th>
-                <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayNameFor(model => model.Price)</a>
-</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayNameFor(model => model.Price)</a>
+            </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayNameFor(model => model.Category)</a>
-    </th>
-            <th></th>
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src="@Html.DisplayFor(modelItem => item.Image)" style="max-width:150px;" />
-                <img src="@Html.DisplayFor(modelItem => item.Image)" style="max-width:150px;" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+    <tr>
+        <td>
+            @foreach (var image in item.GetImages())
+            {
+                <img src="@Html.DisplayFor(modelItem => image)" style="max-width:150px;" />
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category.Name)
+        </td>
+        <td>
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+        </td>
+    </tr>
+ }
     </tbody>
 </table>

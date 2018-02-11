@@ -15,7 +15,10 @@
             @Html.DisplayNameFor(model => model.Image)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Image)
+            @foreach (var image in Model.GetImages())
+            {
+                <img src="@Html.DisplayFor(model => image)" style="max-width:150px;" />
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Name)

@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TuyetWebshop.Models;
 using TuyetWebshop.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace TuyetWebshop.Controllers
 {
     public class ProductAdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _environment;
 
-        public ProductAdminController(ApplicationDbContext context)
+        public ProductAdminController(ApplicationDbContext context, IHostingEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         // GET: ProductAdmin
@@ -57,15 +62,34 @@ namespace TuyetWebshop.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Image,Name,Price,CategoryId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Image,Name,Price,CategoryId")] Product product, List<IFormFile> imageUploads)
         {
             if (ModelState.IsValid)
             {
+                if (imageUploads != null && imageUploads.Count > 0)
+                {
+                    var files = new List<string>();
+                    foreach (var imageUpload in imageUploads)
+                    {
+                        var uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
+                        string newFilename = $"{Guid.NewGuid().ToString()}{Path.GetExtension(imageUpload.FileName)}";
+                        using (var fileStream = new FileStream(Path.Combine(uploadPath, newFilename), FileMode.Create))
+                        {
+                            await imageUpload.CopyToAsync(fileStream);
+                        }
+
+                        files.Add($"/uploads/{newFilename}");
+                    }
+
+                    product.Image = string.Join(",", files);
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Set<Catgory>(), "Id", "Id", product.CategoryId);
+
+            ViewData["CategoryId"] = new SelectList(_context.Set<Catgory>(), "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -82,7 +106,7 @@ namespace TuyetWebshop.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Set<Catgory>(), "Id", "Id", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Set<Catgory>(), "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -91,7 +115,7 @@ namespace TuyetWebshop.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Image,Name,Price,CategoryId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Image,Name,Price,CategoryId")] Product product, List<IFormFile> imageUploads)
         {
             if (id != product.Id)
             {
@@ -102,6 +126,24 @@ namespace TuyetWebshop.Controllers
             {
                 try
                 {
+                    if (imageUploads != null && imageUploads.Count > 0)
+                    {
+                        var files = new List<string>();
+                        foreach (var imageUpload in imageUploads)
+                        {
+                            var uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
+                            string newFilename = $"{Guid.NewGuid().ToString()}{Path.GetExtension(imageUpload.FileName)}";
+                            using (var fileStream = new FileStream(Path.Combine(uploadPath, newFilename), FileMode.Create))
+                            {
+                                await imageUpload.CopyToAsync(fileStream);
+                            }
+
+                            files.Add($"/uploads/{newFilename}");
+                        }
+
+                        product.Image = string.Join(",", files);
+                    }
+
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
