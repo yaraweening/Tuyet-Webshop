@@ -25,13 +25,13 @@
                 @Html.DisplayNameFor(model => model.Image)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" title="Sorteer op naam">@Html.DisplayNameFor(model => model.Name)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayNameFor(model => model.Price)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" title="Sorteer op prijs">@Html.DisplayNameFor(model => model.Price)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayNameFor(model => model.Category)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["GenreSortParm"]" title="Sorteer op categorie">@Html.DisplayNameFor(model => model.Category)</a>
             </th>
         </tr>
     </thead>

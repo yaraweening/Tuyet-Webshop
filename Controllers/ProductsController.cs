@@ -42,7 +42,7 @@ namespace TuyetWebshop.Controllers
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["GenreSortParm"] = sortOrder == "Genre" ? "genre_desc" : "Genre";
-            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Genre";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
             var search = from s in _context.Product.Include(p => p.Category)
                          select s;
