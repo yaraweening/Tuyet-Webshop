@@ -58,10 +58,10 @@ namespace TuyetWebshop.Controllers
                     search = search.OrderByDescending(s => s.Name);
                     break;
                 case "Genre":
-                    search = search.OrderBy(s => s.Category);
+                    search = search.OrderBy(p => p.Category.Name);
                     break;
                 case "genre_desc":
-                    search = search.OrderByDescending(s => s.Category);
+                    search = search.OrderByDescending(p => p.Category.Name);
                     break;
                 case "Price":
                     search = search.OrderBy(s => s.Price);

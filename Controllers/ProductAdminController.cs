@@ -10,9 +10,11 @@ using TuyetWebshop.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TuyetWebshop.Controllers
 {
+    [Authorize]
     public class ProductAdminController : Controller
     {
         private readonly ApplicationDbContext _context;

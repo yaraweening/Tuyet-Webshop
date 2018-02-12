@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TuyetWebshop.Models;
 using TuyetWebshop.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TuyetWebshop.Controllers
 {
+    [Authorize]
     public class CategorieAdminController : Controller
     {
         private readonly ApplicationDbContext _context;
